@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/farpy-d
+farpy-d.so
+farpy-d.dylib
+farpy-d.dll
+farpy-d.a
+farpy-d.lib
+farpy-d-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
