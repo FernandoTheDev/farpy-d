@@ -2,9 +2,10 @@ module frontend.lexer.token;
 
 import std.variant;
 
+// Token type
 enum TokenType
 {
-    // Keywords
+    // keywords
     NEW, // new x = EXPR 0
     MUT, // new mut x = EXPR 1
     IF, // if 2
@@ -80,16 +81,18 @@ enum TokenType
     QUESTION, // ? 64
 }
 
+// Loc from Token
 struct Loc
 {
     string file;
-    uint line;
+    ulong line;
     string line_raw;
-    uint start;
-    uint end;
+    ulong start;
+    ulong end;
     string dir;
 }
 
+// Token
 struct Token
 {
     TokenType kind;
@@ -101,33 +104,52 @@ TokenType[string] keywords;
 
 shared static this()
 {
-    Keywords["new"] = TokenType.NEW;
-    Keywords["mut"] = TokenType.MUT;
-    Keywords["if"] = TokenType.IF;
-    Keywords["else"] = TokenType.ELSE;
-    Keywords["elif"] = TokenType.ELIF;
-    Keywords["fn"] = TokenType.FN;
-    Keywords["return"] = TokenType.RETURN;
-    Keywords["for"] = TokenType.FOR;
-    Keywords["while"] = TokenType.WHILE;
-    Keywords["import"] = TokenType.IMPORT;
-    Keywords["as"] = TokenType.AS;
-    Keywords["break"] = TokenType.BREAK;
-    Keywords["step"] = TokenType.STEP;
-    Keywords["extern"] = TokenType.EXTERN;
-    Keywords["start"] = TokenType.START;
-    Keywords["end"] = TokenType.END;
-    Keywords["struct"] = TokenType.STRUCT;
-    Keywords["false"] = TokenType.FALSE;
-    Keywords["true"] = TokenType.TRUE;
-    Keywords["from"] = TokenType.FROM;
+    keywords["new"] = TokenType.NEW;
+    keywords["mut"] = TokenType.MUT;
+    keywords["if"] = TokenType.IF;
+    keywords["else"] = TokenType.ELSE;
+    keywords["elif"] = TokenType.ELIF;
+    keywords["fn"] = TokenType.FN;
+    keywords["return"] = TokenType.RETURN;
+    keywords["for"] = TokenType.FOR;
+    keywords["while"] = TokenType.WHILE;
+    keywords["import"] = TokenType.IMPORT;
+    keywords["as"] = TokenType.AS;
+    keywords["break"] = TokenType.BREAK;
+    keywords["step"] = TokenType.STEP;
+    keywords["extern"] = TokenType.EXTERN;
+    keywords["start"] = TokenType.START;
+    keywords["end"] = TokenType.END;
+    keywords["struct"] = TokenType.STRUCT;
+    keywords["false"] = TokenType.FALSE;
+    keywords["true"] = TokenType.TRUE;
+    keywords["from"] = TokenType.FROM;
 }
 
 bool isTypeToken(Token token)
 {
+    import std.conv : to;
+
     if (token.kind != TokenType.IDENTIFIER)
         return false;
-    return token.kind in ["int", "float", "string", "bool", "void"];
+
+    static immutable bool[string] typeKeywords = [
+        "int": true,
+        "float": true,
+        "string": true,
+        "bool": true,
+        "void": true
+    ];
+
+    try
+    {
+        string tokenValue = token.value.get!string;
+        return (tokenValue in typeKeywords) !is null;
+    }
+    catch (Exception e)
+    {
+        return false;
+    }
 }
 
 bool isComplexTypeToken(Token token)

@@ -3,7 +3,7 @@
 		"Fernando Dev"
 	],
 	"copyright": "Copyright © 2025, Fernando Dev",
-	"description": "A minimal D application.",
+	"description": "A minimal compiler written in D.",
 	"license": "MIT",
 	"name": "farpy-d"
 }
