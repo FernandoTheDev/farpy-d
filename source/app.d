@@ -3,6 +3,8 @@ import std.file;
 
 import frontend.lexer.lexer;
 import frontend.lexer.token;
+import frontend.parser.parser;
+import frontend.parser.ast;
 
 int main(string[] args)
 {
@@ -30,6 +32,22 @@ int main(string[] args)
 		writeln(tk.kind);
 		writeln(tk.value);
 		writeln(tk.loc, "\n");
+	}
+
+	Parser parser = new Parser(tokens);
+	Program program = parser.parse();
+
+	foreach (node; program.body)
+	{
+		writeln(node.kind);
+		writeln(node.type);
+		writeln(node.loc);
+		writeln(node.value);
+
+		writeln(node.op);
+		writeln(node.left);
+		writeln(node.left.value);
+		writeln(node.right.value);
 	}
 
 	return 0;

@@ -85,10 +85,10 @@ enum TokenType
 struct Loc
 {
     string file;
-    ulong line;
+    size_t line;
     string line_raw;
-    ulong start;
-    ulong end;
+    size_t start;
+    size_t end;
     string dir;
 }
 

@@ -15,10 +15,10 @@ private:
     string file;
     string dir;
 
-    ulong line = 1;
-    ulong offset = 0;
-    ulong lineOffset = 0;
-    ulong start = 1;
+    size_t line = 1;
+    size_t offset = 0;
+    size_t lineOffset = 0;
+    size_t start = 1;
     Token[] tokens = [];
 
     string[] lineCache;
@@ -91,7 +91,7 @@ private:
         return set;
     }
 
-    string getLineText(ulong line)
+    string getLineText(size_t line)
     {
         if (!this.lineCache.length)
         {
@@ -105,9 +105,9 @@ private:
         return this.lineCache[line - 1];
     }
 
-    Loc getLocation(ulong start, ulong end, ulong line = 0)
+    Loc getLocation(size_t start, size_t end, size_t line = 0)
     {
-        ulong currentLine = line == 0 ? this.line : line;
+        size_t currentLine = line == 0 ? this.line : line;
         return Loc(
             this.file,
             currentLine,
@@ -118,19 +118,19 @@ private:
         );
     }
 
-    Token createToken(TokenType kind, Variant value, ulong skipChars = 1)
+    Token createToken(TokenType kind, Variant value, size_t skipChars = 1)
     {
         auto valueLength = to!string(value).length;
         Token token =
         {
-            kind: kind, value: value, loc: this.getLocation(this.start, cast(ulong) this.start + valueLength)
+            kind: kind, value: value, loc: this.getLocation(this.start, cast(size_t) this.start + valueLength)
         };
         this.tokens ~= token;
         this.offset += skipChars;
         return token;
     }
 
-    void createTokenWithLocation(TokenType kind, Variant value, ulong start, ulong length)
+    void createTokenWithLocation(TokenType kind, Variant value, size_t start, size_t length)
     {
         this.tokens ~= Token(
 
@@ -142,8 +142,8 @@ private:
 
     bool lexComment()
     {
-        const ulong startPos = this.start;
-        const ulong startLine = this.line;
+        const size_t startPos = this.start;
+        const size_t startLine = this.line;
         this.offset++; // Skip the first '/'
 
         if (this.source[this.offset] == '/')
@@ -187,7 +187,7 @@ private:
 
     void lexIdentifier()
     {
-        const ulong startOffset = this.offset;
+        const size_t startOffset = this.offset;
 
         while (this.offset < this.source.length)
         {
@@ -239,7 +239,7 @@ private:
 
     void lexNumber()
     {
-        ulong startOffset = this.offset;
+        size_t startOffset = this.offset;
 
         while (this.offset < this.source.length && this.source[this.offset] in DIGIT_CHARS)
         {
@@ -273,7 +273,7 @@ public:
     {
         try
         {
-            ulong sourceLength = cast(ulong) this.source.length;
+            size_t sourceLength = cast(size_t) this.source.length;
 
             while (this.offset < sourceLength)
             {
